@@ -1,0 +1,110 @@
+<program> ::= { <top_level_declaration> }
+
+<top_level_declaration> ::= <import_stmt>
+                           | <bring_stmt>
+                           | <module_decl>
+                           | <class_decl>
+                           | <interface_decl>
+                           | <delegate_decl>
+                           | <function_decl>
+                           | <struct_decl>
+
+<import_stmt> ::= "import" <qualified_name> ";"
+<bring_stmt>  ::= "bring" <qualified_name> ";"
+
+<qualified_name> ::= <identifier> { "." <identifier> }
+
+<module_decl> ::= "module" <identifier> "{" { <top_level_declaration> } "}"
+
+<class_decl> ::= [ <access_modifier> ] "class" <identifier> [ ":" <class_inheritance> ] "{" { <class_member> } "}"
+
+<class_inheritance> ::= <identifier> { "," <identifier> [ "as" <identifier> ] }
+
+<class_member> ::= <field_decl>
+                 | <function_decl>
+                 | <event_decl>
+                 | <constructor_decl>
+                 | <destructor_decl>
+
+<field_decl> ::= [ <access_modifier> ] "let" [ "$" ] <identifier> ":" <type> "=" <expression> ";"
+               | [ <access_modifier> ] "static" "let" [ "$" ] <identifier> ":" <type> "=" <expression> ";"
+
+<event_decl> ::= [ <access_modifier> ] "event" <identifier> ":" <type> ";"
+
+<constructor_decl> ::= [ <access_modifier> ] "def" "new" "(" [ <parameter_list> ] ")" "->" "self" <block>
+
+<destructor_decl> ::= "def" "drop" "(" ")" <block>
+                    | "def" "dispose" "(" ")" <block>
+
+<delegate_decl> ::= "delegate" "def" <identifier> "(" [ <parameter_list> ] ")" "->" <type> ";"
+
+<interface_decl> ::= [ <access_modifier> ] "interface" <identifier> "{" { <function_signature> } "}"
+
+<function_signature> ::= "def" <identifier> "(" [ <parameter_list> ] ")" "->" <type> ";"
+
+<function_decl> ::= [ <access_modifier> ] "def" <identifier> "(" [ <parameter_list> ] ")" [ "on:" <identifier> ] [ "of:" <qualified_name> "." <identifier> ] "->" <type> <block>
+
+<parameter_list> ::= <parameter> { "," <parameter> }
+<parameter> ::= <identifier> ":" <type>
+
+<access_modifier> ::= "public" | "private" | "protected" | "friend"
+
+<type> ::= <primitive_type>
+         | <identifier>
+         | "&" <type>
+         | "$" <type>
+         | <type> "[" "]"
+         | <type> "<" <type_list> ">"
+         | "fn" "(" [ <type_list> ] ")" "->" <type>
+
+<type_list> ::= <type> { "," <type> }
+
+<expression> ::= <literal>
+               | <identifier>
+               | <expression> <operator> <expression>
+               | "(" <expression> ")"
+               | <expression> "." <identifier>
+               | <expression> "(" [ <argument_list> ] ")"
+               | "new" <type> [ <object_initializer> ]
+               | <expression> "as" <type>
+               | <expression> "is" <type>
+               | "not" <expression>
+
+<argument_list> ::= <expression> { "," <expression> }
+
+<object_initializer> ::= "{" <member_initializer_list> "}"
+<member_initializer_list> ::= <member_initializer> { "," <member_initializer> }
+<member_initializer> ::= <identifier> "=" <expression>
+
+<operator> ::= "+" | "-" | "*" | "/" | "%" 
+             | "==" | "!=" | "<" | ">" | "<=" | ">=" 
+             | "and" | "or" | "=" | "+=" | "-="
+
+<block> ::= "{" { <statement> } "}"
+
+<statement> ::= <expression_stmt>
+              | <let_stmt>
+              | <if_stmt>
+              | <match_stmt>
+              | <return_stmt>
+              | <using_stmt>
+              | <with_stmt>
+              | <block>
+
+<expression_stmt> ::= <expression> ";"
+<let_stmt> ::= "let" [ "$" ] <identifier> ":" <type> "=" <expression> ";"
+<if_stmt> ::= "if" <expression> <block> [ "else" <block> ]
+<match_stmt> ::= "match" <expression> "{" { <match_case> } "}"
+<match_case> ::= <literal> ":" <block>
+<return_stmt> ::= "return" [ <expression> ] ";"
+<using_stmt> ::= "using" <identifier> "=" <expression> <block>
+<with_stmt> ::= "with" <identifier> <block>
+
+<literal> ::= <number_literal> | <string_literal> | "true" | "false" | "null"
+<number_literal> ::= [ "-" ] <digit> { <digit> }
+<string_literal> ::= "u8" "\"" { <char> } "\"" | "$" "\"" { <char> } "\""
+
+<identifier> ::= <letter> { <letter> | <digit> | "_" }
+
+<letter> ::= "a"..."z" | "A"..."Z" | "_"
+<digit> ::= "0"..."9"
