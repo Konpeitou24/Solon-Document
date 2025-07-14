@@ -329,26 +329,6 @@ def calc(left: int32, right: int32) -> struct {add: int32, sub: int32} {
 ```
 
 
-  temperature = 30 // ここは右側が自明である場合型推論が有効です。
-};
-
-def use_report(): -> void {
-  print(report.weather); // sunny
-  return;
-}
-```
-
-戻り値の型として使用される無名構造体もあります。
-
-```Solon
-def calc(left: int32, right: int32) -> struct {add: int32, sub: int32} {
-  return {add = left + right, sub = left - right};
-}
-```
-
-
-またクエリ構文では`let`による型推論が有効です。これは配列のメソッドによるクエリの代替となるシンタックスシュガーとしてこの構文がみなされることから由来します。
-
 ### 基本的な構造
 
 クエリ構文は、主に以下のキーワード句で構成されます。

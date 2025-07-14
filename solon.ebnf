@@ -104,7 +104,7 @@
 <number_literal> ::= [ "-" ] <digit> { <digit> }
 <string_literal> ::= "u8" "\"" { <char> } "\"" | "$" "\"" { <char> } "\""
 
-<identifier> ::= <letter> { <letter> | <digit> | "_" }
+<identifier> ::= <letter> { <letter> | <digit> | "_" | "-" }
 
 <letter> ::= "a"..."z" | "A"..."Z" | "_"
 <digit> ::= "0"..."9"
